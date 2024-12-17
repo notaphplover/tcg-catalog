@@ -1,0 +1,7 @@
+/data/lorcana-cards.json
+/data/mtg-cards.json
+/lib
+/node_modules
+/tmp
+
+.env
