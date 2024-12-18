@@ -5,6 +5,7 @@
   "scripts": {
     "build": "tsc --build tsconfig.json",
     "build:clean": "rimraf lib",
+    "data:ingest": "./lib/cjs/scripts/ingest/index.js",
     "format": "prettier --write ./src/**/*.ts",
     "lint": "eslint ./src",
     "prebuild": "pnpm run build:clean",
@@ -23,6 +24,8 @@
     "@nestjs/platform-fastify": "10.4.15",
     "dotenv": "16.4.7",
     "envalid": "8.0.0",
+    "fastify": "4.29.0",
+    "http-status-codes": "2.3.0",
     "jsonwebtoken": "9.0.2",
     "mongodb": "6.12.0"
   },
