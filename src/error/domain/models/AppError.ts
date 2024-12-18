@@ -1,6 +1,8 @@
 import { AppErrorKind } from './AppErrorKind';
 
-export const isAppErrorSymbol: unique symbol = Symbol.for('isAppError');
+export const isAppErrorSymbol: unique symbol = Symbol.for(
+  'tcg-catalog/isAppError',
+);
 
 export class AppError extends Error {
   public [isAppErrorSymbol]: true;
