@@ -6,3 +6,13 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: password
     ports:
       - 27017:27017
+
+  openapi_doc_server:
+    image: swaggerapi/swagger-ui:v5.18.2
+    environment:
+      - SHOW_COMMON_EXTENSIONS=true
+      - SWAGGER_JSON=/schemas/openapi.yaml
+    ports:
+      - 8080:8080
+    volumes:
+      - ./openapi.yaml:/schemas/openapi.yaml

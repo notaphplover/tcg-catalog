@@ -1,0 +1,396 @@
+openapi: 3.1.0
+info:
+  title: TCG Catalog
+  version: '1.0'
+servers:
+  - url: 'http://127.0.0.1:3001'
+    description: Local development server
+
+components:
+  schemas:
+    ErrorV1:
+      $id: https://tgc-catalog/v1/errors/error.json
+      title: ErrorV1
+      type: object
+      additionalProperties: false
+      properties:
+        code:
+          type: string
+        description:
+          type: string
+        parameters:
+          type: object
+      required:
+        - description
+
+    CardFindNumberEnumQueryFilterV1:
+      $id: 'https://tgc-catalog/v1/cards/card-find-number-enum-query-filter'
+      $schema: 'https://json-schema.org/draft/2020-12/schema'
+      anyOf:
+        - allOf:
+            - $ref: 'https://tgc-catalog/v1/cards/card-find-query-and-filter'
+            - properties:
+                filters:
+                  items:
+                    $ref: >-
+                      https://tgc-catalog/v1/cards/card-find-number-enum-query-filter
+                  type: array
+              type: object
+        - allOf:
+            - $ref: 'https://tgc-catalog/v1/cards/card-find-query-list-filter'
+            - properties:
+                values:
+                  items:
+                    type: number
+                  type: array
+              type: object
+        - allOf:
+            - $ref: 'https://tgc-catalog/v1/cards/card-find-query-or-filter'
+            - properties:
+                filters:
+                  items:
+                    $ref: >-
+                      https://tgc-catalog/v1/cards/card-find-number-enum-query-filter
+                  type: array
+              type: object
+        - allOf:
+            - $ref: 'https://tgc-catalog/v1/cards/card-find-query-range-filter'
+            - properties:
+                max:
+                  properties:
+                    value:
+                      type: number
+                  type: object
+                min:
+                  properties:
+                    value:
+                      type: number
+                  type: object
+              type: object
+        - allOf:
+            - $ref: 'https://tgc-catalog/v1/cards/card-find-query-value-filter'
+            - properties:
+                value:
+                  type: number
+              type: object
+
+    CardFindQueryV1:
+      $id: 'https://tgc-catalog/v1/cards/card-find-query'
+      $schema: 'https://json-schema.org/draft/2020-12/schema'
+      additionalProperties: false
+      properties:
+        color:
+          $ref: 'https://tgc-catalog/v1/cards/card-find-optional-string-enum-query-filter'
+        inkCost:
+          $ref: 'https://tgc-catalog/v1/cards/card-find-number-enum-query-filter'
+        kind:
+          $ref: 'https://tgc-catalog/v1/cards/card-find-string-enum-query-filter'
+        limit:
+          maximum: 100
+          minimum: 0
+          type: integer
+        name:
+          $ref: 'https://tgc-catalog/v1/cards/card-find-query-text-filter'
+        offset:
+          minimum: 0
+          type: integer
+        rarity:
+          $ref: 'https://tgc-catalog/v1/cards/card-find-string-enum-query-filter'
+      required:
+        - limit
+      type: object
+
+    CardFindQueryAndFilterV1:
+      $id: 'https://tgc-catalog/v1/cards/card-find-query-and-filter'
+      $schema: 'https://json-schema.org/draft/2020-12/schema'
+      additionalProperties: false
+      properties:
+        filters:
+          type: array
+        kind:
+          const: and
+          type: string
+      required:
+        - filters
+        - kind
+      type: object
+
+    CardFindQueryListFilterV1:
+      $id: 'https://tgc-catalog/v1/cards/card-find-query-list-filter'
+      $schema: 'https://json-schema.org/draft/2020-12/schema'
+      additionalProperties: false
+      properties:
+        kind:
+          const: list
+          type: string
+        values:
+          type: array
+      required:
+        - kind
+        - values
+      type: object
+
+    CardFindQueryNullFilterV1:
+      $id: 'https://tgc-catalog/v1/cards/card-find-query-null-filter'
+      $schema: 'https://json-schema.org/draft/2020-12/schema'
+      additionalProperties: false
+      properties:
+        kind:
+          const: 'null'
+          type: string
+      required:
+        - kind
+      type: object
+
+    CardFindQueryOrFilterV1:
+      $id: 'https://tgc-catalog/v1/cards/card-find-query-or-filter'
+      $schema: 'https://json-schema.org/draft/2020-12/schema'
+      additionalProperties: false
+      properties:
+        filters:
+          type: array
+        kind:
+          const: or
+          type: string
+      required:
+        - filters
+        - kind
+      type: object
+
+    CardFindQueryRangeFilterV1:
+      $id: 'https://tgc-catalog/v1/cards/card-find-query-range-filter'
+      $schema: 'https://json-schema.org/draft/2020-12/schema'
+      additionalProperties: false
+      properties:
+        kind:
+          const: range
+          type: string
+        max:
+          properties:
+            exclude:
+              type: boolean
+            value: {}
+          required:
+            - exclude
+            - value
+          type: object
+        min:
+          properties:
+            exclude:
+              type: boolean
+            value: {}
+          required:
+            - exclude
+            - value
+          type: object
+      required:
+        - kind
+        - max
+        - min
+      type: object
+
+    CardFindQueryTextFilterV1:
+      $id: 'https://tgc-catalog/v1/cards/card-find-query-text-filter'
+      $schema: 'https://json-schema.org/draft/2020-12/schema'
+      additionalProperties: false
+      properties:
+        kind:
+          const: text
+          type: string
+        value: {}
+      required:
+        - kind
+        - value
+      type: object
+
+    CardFindQueryValueFilterV1:
+      $id: 'https://tgc-catalog/v1/cards/card-find-query-value-filter'
+      $schema: 'https://json-schema.org/draft/2020-12/schema'
+      additionalProperties: false
+      properties:
+        kind:
+          const: value
+          type: string
+        value: {}
+      required:
+        - kind
+        - value
+      type: object
+
+    CardFindStringEnumQueryFilterV1:
+      $id: 'https://tgc-catalog/v1/cards/card-find-string-enum-query-filter'
+      $schema: 'https://json-schema.org/draft/2020-12/schema'
+      anyOf:
+        - allOf:
+            - $ref: 'https://tgc-catalog/v1/cards/card-find-query-and-filter'
+            - properties:
+                filters:
+                  items:
+                    $ref: >-
+                      https://tgc-catalog/v1/cards/card-find-string-enum-query-filter
+                  type: array
+              type: object
+        - allOf:
+            - $ref: 'https://tgc-catalog/v1/cards/card-find-query-list-filter'
+            - properties:
+                values:
+                  items:
+                    type: string
+                  type: array
+              type: object
+        - allOf:
+            - $ref: 'https://tgc-catalog/v1/cards/card-find-query-or-filter'
+            - properties:
+                filters:
+                  items:
+                    $ref: >-
+                      https://tgc-catalog/v1/cards/card-find-string-enum-query-filter
+                  type: array
+              type: object
+        - allOf:
+            - $ref: 'https://tgc-catalog/v1/cards/card-find-query-value-filter'
+            - properties:
+                value:
+                  type: string
+              type: object
+
+    CardFindOptionalStringEnumQueryFilterV1:
+      $id: 'https://tgc-catalog/v1/cards/card-find-optional-string-enum-query-filter'
+      $schema: 'https://json-schema.org/draft/2020-12/schema'
+      anyOf:
+        - allOf:
+            - $ref: 'https://tgc-catalog/v1/cards/card-find-query-and-filter'
+            - properties:
+                filters:
+                  items:
+                    $ref: >-
+                      https://tgc-catalog/v1/cards/card-find-optional-string-enum-query-filter
+                  type: array
+              type: object
+        - allOf:
+            - $ref: 'https://tgc-catalog/v1/cards/card-find-query-list-filter'
+            - properties:
+                values:
+                  items:
+                    type: string
+                  type: array
+              type: object
+        - $ref: 'https://tgc-catalog/v1/cards/card-find-query-null-filter'
+        - allOf:
+            - $ref: 'https://tgc-catalog/v1/cards/card-find-query-or-filter'
+            - properties:
+                filters:
+                  items:
+                    $ref: >-
+                      https://tgc-catalog/v1/cards/card-find-optional-string-enum-query-filter
+                  type: array
+              type: object
+        - allOf:
+            - $ref: 'https://tgc-catalog/v1/cards/card-find-query-value-filter'
+            - properties:
+                value:
+                  type: string
+              type: object
+
+    CardSearchV1:
+      $id: 'https://tgc-catalog/v1/cards/card-search'
+      items:
+        $ref: 'https://tgc-catalog/v1/cards/card'
+      type: array
+
+    CardV1:
+      $id: 'https://tgc-catalog/v1/cards/card'
+      anyOf:
+        - $ref: 'https://tgc-catalog/v1/cards/lorcana-card'
+        - $ref: 'https://tgc-catalog/v1/cards/mtg-card'
+
+    LorcanaCardV1:
+      $id: 'https://tgc-catalog/v1/cards/lorcana-card'
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        inkCost:
+          type: integer
+        kind:
+          const: lorcana
+          type: string
+        name:
+          type: string
+        rarity:
+          $ref: 'https://tgc-catalog/v1/cards/lorcana-card-rarity'
+      type: object
+
+    LorcanaCardRarityV1:
+      $id: 'https://tgc-catalog/v1/cards/lorcana-card-rarity'
+      enum:
+        - common
+        - enchanted
+        - legendary
+        - promo
+        - rare
+        - superRare
+        - uncommon
+      type: string
+
+    MtgCardColorV1:
+      $id: 'https://tgc-catalog/v1/cards/mtg-card-color'
+      enum:
+        - U
+        - B
+        - G
+        - R
+        - W
+      type: string
+
+    MtgCardRarityV1:
+      $id: 'https://tgc-catalog/v1/cards/mtg-card-rarity'
+      enum:
+        - common
+        - mythic
+        - rare
+        - special
+        - uncommon
+      type: string
+
+    MtgCardV1:
+      $id: 'https://tgc-catalog/v1/cards/mtg-card'
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        color:
+          $ref: 'https://tgc-catalog/v1/cards/mtg-card-color'
+        kind:
+          const: mtg
+          type: string
+        name:
+          type: string
+        rarity:
+          $ref: 'https://tgc-catalog/v1/cards/mtg-card-rarity'
+      type: object
+
+paths:
+  /v1/games/searches:
+    post:
+      summary: Create a card search
+      operationId: createCardsSearch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: 'https://tgc-catalog/v1/cards/card-find-query'
+        required: true
+      responses:
+        '200':
+          description: Card search created
+          content:
+            application/json:
+              schema:
+                $ref: 'https://tgc-catalog/v1/cards/card-search'
+        '400':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: 'https://tgc-catalog/v1/errors/error.json'
