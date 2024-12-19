@@ -60,6 +60,24 @@ export class CardDbFilterFromFindCardQueryBuilder
       );
     }
 
+    if (cardFindQuery.name !== undefined) {
+      cardDbFilters.push(
+        this.#mongoCardDbFilterFromCardQueryFilterBuilder.build(
+          'name',
+          cardFindQuery.name as AnyCardFindQueryFilter<string>,
+        ),
+      );
+    }
+
+    if (cardFindQuery.rarity !== undefined) {
+      cardDbFilters.push(
+        this.#mongoCardDbFilterFromCardQueryFilterBuilder.build(
+          'rarity',
+          cardFindQuery.rarity as AnyCardFindQueryFilter<string>,
+        ),
+      );
+    }
+
     return {
       $and: cardDbFilters,
     };

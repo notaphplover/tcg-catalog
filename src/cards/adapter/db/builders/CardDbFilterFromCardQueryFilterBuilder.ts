@@ -21,9 +21,9 @@ export class CardDbFilterFromCardQueryFilterBuilder<T>
     switch (filter.kind) {
       case CardFindQueryFilterKind.and:
         return {
-          $and: filter.filters.map((filter: AnyCardFindQueryFilter<T>) => ({
-            [property]: this.build(property, filter),
-          })),
+          $and: filter.filters.map((filter: AnyCardFindQueryFilter<T>) =>
+            this.build(property, filter),
+          ),
         };
       case CardFindQueryFilterKind.list:
         return {
@@ -44,23 +44,23 @@ export class CardDbFilterFromCardQueryFilterBuilder<T>
         };
       case CardFindQueryFilterKind.or:
         return {
-          $or: filter.filters.map((filter: AnyCardFindQueryFilter<T>) => ({
-            [property]: this.build(property, filter),
-          })),
+          $or: filter.filters.map((filter: AnyCardFindQueryFilter<T>) =>
+            this.build(property, filter),
+          ),
         };
       case CardFindQueryFilterKind.range: {
         const propertyFilter: FilterOperators<T> = {};
 
         if (filter.max.exclude) {
-          propertyFilter.$gt = filter.max.value;
+          propertyFilter.$lt = filter.max.value;
         } else {
-          propertyFilter.$gte = filter.max.value;
+          propertyFilter.$lte = filter.max.value;
         }
 
         if (filter.min.exclude) {
-          propertyFilter.$lt = filter.min.value;
+          propertyFilter.$gt = filter.min.value;
         } else {
-          propertyFilter.$lte = filter.min.value;
+          propertyFilter.$gte = filter.min.value;
         }
 
         return {
@@ -70,7 +70,7 @@ export class CardDbFilterFromCardQueryFilterBuilder<T>
       case CardFindQueryFilterKind.text:
         return {
           $text: {
-            $search: filter.value,
+            $search: `"${filter.value}"`,
           },
         };
       case CardFindQueryFilterKind.value:

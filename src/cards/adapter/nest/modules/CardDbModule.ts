@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 
+import { MongoDbModule } from '../../../../foundation/db/adapter/nest/modules/MongoDbModule';
 import { cardSearchPortSymbol } from '../../../application/ports/output/CardSearchPort';
 import { CardDbMongoDbSearchAdapter } from '../../db/adapters/CardDbMongoDbSearchAdapter';
 import { CardDbFilterFromCardQueryFilterBuilder } from '../../db/builders/CardDbFilterFromCardQueryFilterBuilder';
@@ -8,6 +9,7 @@ import { CardFromCardDbBuilder } from '../../db/builders/CardFromCardDbBuilder';
 
 @Module({
   exports: [cardSearchPortSymbol],
+  imports: [MongoDbModule],
   providers: [
     CardDbFilterFromCardQueryFilterBuilder,
     CardDbFilterFromFindCardQueryBuilder,

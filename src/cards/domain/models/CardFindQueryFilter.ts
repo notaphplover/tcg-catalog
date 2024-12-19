@@ -1,11 +1,11 @@
 export enum CardFindQueryFilterKind {
-  and,
-  list,
-  null,
-  or,
-  range,
-  text,
-  value,
+  and = 'and',
+  list = 'list',
+  null = 'null',
+  or = 'or',
+  range = 'range',
+  text = 'text',
+  value = 'value',
 }
 
 export interface BaseCardFindQueryFilter<
